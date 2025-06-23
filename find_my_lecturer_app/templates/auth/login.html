@@ -2,15 +2,66 @@
 {% block title %}Lecturer Login{% endblock %}
 
 {% block content %}
-  <h2 class="mb-3">Sign in</h2>
-  <form method="post">
+<style>
+  .login-box {
+    max-width: 500px;
+    margin: auto;
+    padding: 40px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .form-label {
+    font-weight: 600;
+  }
+
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+
+  .login-title {
+    font-weight: 700;
+  }
+
+  .brand-icon {
+    font-size: 2rem;
+    color: #0d6efd;
+  }
+</style>
+
+<div class="login-box">
+  <div class="text-center mb-4">
+    <i class="bi bi-person-lock brand-icon"></i>
+    <h2 class="login-title mt-2">Lecturer Login</h2>
+    <p class="text-muted">Sign in with your Lecturer ID and password</p>
+  </div>
+
+  <form method="post" novalidate>
     {% csrf_token %}
-    <label for="id_username">LecturerID:</label><br>
-    <input type="text" name="username" class="form-control mb-2" autofocus>
 
-    {{ form.password.label_tag }}<br>
-    <input type="password" name="password" class="form-control mb-3">
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    {% endif %}
 
-    <button type="submit" class="btn btn-primary w-100">Log in</button>
+    <div class="mb-3">
+      <label for="id_username" class="form-label">Lecturer ID</label>
+      <input type="text" name="username" class="form-control" id="id_username" placeholder="e.g., LC034XYY" autofocus>
+    </div>
+
+    <div class="mb-4">
+      <label for="id_password" class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" id="id_password" placeholder="Enter password">
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+      <i class="bi bi-box-arrow-in-right me-1"></i> Log In
+    </button>
   </form>
+</div>
 {% endblock %}

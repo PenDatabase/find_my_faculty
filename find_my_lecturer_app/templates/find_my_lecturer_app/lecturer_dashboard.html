@@ -2,11 +2,89 @@
 {% block title %}My Dashboard{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Welcome, {{ lecturer.full_name }}</h2>
-<p><strong>Department:</strong> {{ lecturer.department.name }}</p>
-<p><strong>Office:</strong> {{ lecturer.office }}</p>
-<p><strong>Role:</strong> {{ lecturer.get_role_display }}</p>
-<p><strong>Notes:</strong> {{ lecturer.notes|default:"No notes yet." }}</p>
+<style>
+  .dashboard-card {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    background: #fefefe;
+    padding: 30px;
+    transition: transform 0.2s ease;
+  }
 
-<a href="{% url 'lecturer-edit' lecturer.pk %}" class="btn btn-primary">Update Info</a>
+  .dashboard-card:hover {
+    transform: scale(1.01);
+  }
+
+  .dashboard-header {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 20px;
+  }
+
+  .dashboard-label {
+    font-weight: 600;
+    color: #6c757d;
+  }
+
+  .dashboard-value {
+    font-size: 1.1rem;
+  }
+
+  .btn-update {
+    margin-top: 25px;
+  }
+</style>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="dashboard-card">
+        <div class="dashboard-header text-center">
+          Welcome, {{ lecturer.full_name }}
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+          <span class="dashboard-label">Department:</span>
+          <div class="dashboard-value">{{ lecturer.department.name }}</div>
+        </div>
+
+        <div class="mb-3">
+          <span class="dashboard-label">Office:</span>
+          <div class="dashboard-value">
+            {% if lecturer.office %}
+              {{ lecturer.office.office_number }} – {{ lecturer.office.location }}, Floor {{ lecturer.office.floor }}
+            {% else %}
+              <em class="text-muted">No office assigned</em>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <span class="dashboard-label">Role:</span>
+          <div class="dashboard-value">{{ lecturer.get_role_display }}</div>
+        </div>
+
+        <div class="mb-3">
+          <span class="dashboard-label">Notes:</span>
+          <div class="dashboard-value">
+            {% if lecturer.notes %}
+              {{ lecturer.notes }}
+            {% else %}
+              <em class="text-muted">No notes yet.</em>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="{% url 'find_my_lecturer_app:lecturer-edit' lecturer.pk %}" class="btn btn-outline-primary btn-update px-4">
+            <i class="bi bi-pencil-square me-1"></i> Update Info
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

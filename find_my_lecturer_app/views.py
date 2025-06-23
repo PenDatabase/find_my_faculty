@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView
 from django.db.models import Q
@@ -134,6 +135,8 @@ class LecturerDashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lecturer = Lecturer.objects.select_related("department", "office").filter(user=self.request.user).first()
+        if not lecturer:
+            raise Http404("No lecturer profile is linked to this user.")
         context["lecturer"] = lecturer
         return context
 

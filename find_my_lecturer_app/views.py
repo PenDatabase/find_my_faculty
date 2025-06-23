@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView
 from django.db.models import Q
 from django.apps import apps
 from django.utils.text import capfirst
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 from .models import (
     Lecturer,
@@ -135,3 +136,19 @@ class LecturerDashboardView(LoginRequiredMixin, TemplateView):
         lecturer = Lecturer.objects.select_related("department", "office").filter(user=self.request.user).first()
         context["lecturer"] = lecturer
         return context
+
+
+
+
+
+
+class LecturerUpdateView(LoginRequiredMixin, UpdateView):
+    model = Lecturer
+    fields = ['office', 'notes']  # Add other editable fields if needed
+    template_name = "find_my_lecturer_app/lecturer_edit.html"
+
+    def get_queryset(self):
+        return Lecturer.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse_lazy('lecturer-dashboard')

@@ -1,0 +1,105 @@
+{% extends "find_my_lecturer_app/base.html" %}
+{% block title %}Database Overview{% endblock %}
+
+{% block content %}
+<style>
+  .model-card {
+    font-size: 1.05rem;
+    border-radius: 12px;
+  }
+
+  .model-card .card-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    background-color: #f8f9fa;
+  }
+
+  .model-table th,
+  .model-table td {
+    font-size: 1rem;
+    vertical-align: middle;
+  }
+
+  .model-table td {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+
+  .badge {
+    font-size: 0.9rem;
+    padding: 0.4em 0.6em;
+  }
+</style>
+
+<h2 class="mb-4 text-primary fw-bold">
+  <i class="bi bi-diagram-3 me-2"></i> Database Implementation Overview
+</h2>
+
+{% for m in models_info %}
+  <div class="card model-card shadow-sm mb-5">
+    <div class="card-header">
+      {{ m.model_name }}
+      <span class="text-muted fs-6"> &nbsp; (SQL Table: <code>{{ m.db_table }}</code>)</span>
+    </div>
+
+    <div class="card-body">
+      <!-- Field list -->
+      <h5 class="fw-semibold mb-3">Fields</h5>
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered model-table">
+          <thead class="table-light">
+            <tr class="align-middle">
+              <th>Name</th>
+              <th>Type / Relation</th>
+              <th>Primary Key</th>
+              <th>Nullable</th>
+              <th>Choices</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for f in m.fields %}
+              <tr>
+                <td><code>{{ f.name }}</code></td>
+                <td>{{ f.type }}</td>
+                <td>
+                  {% if f.pk %}
+                    <span class="badge bg-success">Yes</span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if f.null %}
+                    <span class="badge bg-warning text-dark">Yes</span>
+                  {% else %}
+                    <span class="text-muted">No</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if f.choices %}
+                    <span class="badge bg-info text-dark">{{ f.choices|length }} option{{ f.choices|length|pluralize }}</span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sample data -->
+      <h5 class="fw-semibold mt-5 mb-3">Sample Rows <small class="text-muted">(first {{ m.samples|length }})</small></h5>
+      {% if m.samples %}
+        <ol class="list-group list-group-numbered">
+          {% for obj in m.samples %}
+            <li class="list-group-item">{{ obj }}</li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="text-muted"><em>No data yet.</em></p>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}

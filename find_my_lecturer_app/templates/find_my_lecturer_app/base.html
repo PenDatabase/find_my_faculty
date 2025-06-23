@@ -1,0 +1,125 @@
+{% load static %}
+{% load tz %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Find My Faculty{% endblock %}</title>
+
+  <!-- Bootstrap CSS (local) -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      background-color: #f0f4f8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      color: #0d6efd;
+    }
+
+    .main-container {
+      flex: 1;
+      margin-top: 80px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      padding: 20px 0;
+      background-color: #0d6efd;
+      color: white;
+      text-align: center;
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-white fixed-top border-bottom shadow-sm">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="{% url 'find_my_lecturer_app:home' %}">
+        <i class="bi bi-person-bounding-box"></i> Find My Faculty
+      </a>
+
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto align-items-center">
+
+          <!-- Search Link -->
+          <li class="nav-item me-2">
+            <a class="nav-link btn btn-outline-primary" href="{% url 'find_my_lecturer_app:lecturer-search' %}">
+              <i class="bi bi-search"></i> Search
+            </a>
+          </li>
+
+          <!-- Models Overview Link -->
+          <li class="nav-item me-3">
+            <a class="nav-link btn btn-outline-secondary" href="{% url 'find_my_lecturer_app:models-overview' %}">
+              <i class="bi bi-diagram-3"></i> Models Overview
+            </a>
+          </li>
+
+          <!-- Lecturer Auth Links -->
+          {% if user.is_authenticated %}
+            <li class="nav-item me-2">
+              <span class="navbar-text text-success fw-semibold">
+                <i class="bi bi-person-circle"></i> {{ user.get_full_name|default:user.username }}
+              </span>
+            </li>
+            <li class="nav-item">
+              <form method="post" action="{% url 'find_my_lecturer_app:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="nav-link btn btn-danger">
+                  <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+              </form>
+            </li>
+          {% else %}
+            <li class="nav-item me-2">
+              <a class="nav-link btn btn-outline-success" href="{% url 'find_my_lecturer_app:login' %}">
+                <i class="bi bi-box-arrow-in-right"></i> Lecturer Login
+              </a>
+            </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container main-container">
+    {% block content %}
+    <!-- Page-specific content goes here -->
+    {% endblock %}
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="mb-0">🎓 Covenant University – Find My Faculty © {{ now|date:"Y" }}</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

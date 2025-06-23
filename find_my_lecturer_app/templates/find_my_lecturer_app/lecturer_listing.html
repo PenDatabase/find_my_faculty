@@ -1,0 +1,137 @@
+{% extends "find_my_lecturer_app/base.html" %}
+
+{% block title %}Search For Faculty Member{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <h2 class="text-center text-primary fw-bold mb-3">
+    <i class="bi bi-search"></i> Search for a Faculty Member
+  </h2>
+
+  <!-- Search Form -->
+  <form method="get" class="row g-3 align-items-center justify-content-center">
+    <div class="col-md-6">
+      <input
+        type="text"
+        name="q"
+        class="form-control"
+        placeholder="Search by name, department, college, or office..."
+        value="{{ query }}"
+      >
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </div>
+  </form>
+</div>
+
+{% if lecturers %}
+  <p class="text-muted mb-3">Showing {{ page_obj.paginator.count }} result{{ page_obj.paginator.count|pluralize }}</p>
+
+  <div class="row">
+    {% for lecturer in lecturers %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <a
+          href="{% url 'find_my_lecturer_app:lecturer-detail' lecturer.lecturer_id %}"
+          class="text-decoration-none text-dark"
+        >
+          <div class="card shadow-sm h-100 lecturer-card-hover">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="me-3">
+                  <div
+                    class="d-flex justify-content-center align-items-center rounded-circle"
+                    style="width:50px;height:50px;background:#e7f0ff;color:#0d6efd;font-weight:bold;font-size:1.2rem;"
+                  >
+                    {{ lecturer.full_name|slice:1|upper }}
+                  </div>
+                </div>
+                <div>
+                  <h5 class="mb-0 text-primary">
+                    {{ lecturer.full_name }}
+                  </h5>
+                  <small class="text-muted">ID: {{ lecturer.lecturer_id }}</small>
+                </div>
+              </div>
+
+              {% if lecturer.hod_record %}
+                <span class="badge bg-success me-1">
+                  <i class="bi bi-star-fill"></i> HOD
+                </span>
+              {% endif %}
+
+              {% if lecturer.secretary_record %}
+                <span class="badge bg-info me-1">
+                  <i class="bi bi-envelope-fill"></i> Secretary
+                </span>
+              {% endif %}
+
+              <p class="mb-1">
+                <strong>Department:</strong><br>
+                {{ lecturer.department.name }}
+              </p>
+
+              <p class="mb-1">
+                <strong>College:</strong><br>
+                {{ lecturer.department.college.name }}
+              </p>
+
+              {% if lecturer.office %}
+                <p class="mb-0">
+                  <strong>Office:</strong><br>
+                  {{ lecturer.office.office_number }},
+                  {{ lecturer.office.location }},
+                  Floor {{ lecturer.office.floor }}
+                </p>
+              {% else %}
+                <p class="text-muted mb-0"><em>No office assigned</em></p>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+
+        {% for num in paginator.page_range %}
+          {% if num == page_obj.number %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="alert alert-warning text-center mt-4">
+    <i class="bi bi-exclamation-circle me-1"></i> No faculty member matches your search.
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "find_my_lecturer_app/base.html" %}
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Welcome, {{ lecturer.full_name }}</h2>
+<p><strong>Department:</strong> {{ lecturer.department.name }}</p>
+<p><strong>Office:</strong> {{ lecturer.office }}</p>
+<p><strong>Role:</strong> {{ lecturer.get_role_display }}</p>
+<p><strong>Notes:</strong> {{ lecturer.notes|default:"No notes yet." }}</p>
+
+<a href="{% url 'lecturer-edit' lecturer.pk %}" class="btn btn-primary">Update Info</a>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "find_my_lecturer_app/base.html" %}
+{% load humanize %}
+
+{% block title %}{{ lecturer.full_name }} – Faculty Member Details{% endblock %}
+
+{% block content %}
+<a href="{% url 'find_my_lecturer_app:lecturer-search' %}" class="btn btn-link mb-3">
+  <i class="bi bi-arrow-left-circle"></i> Back to Search
+</a>
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+
+    <!-- Profile Card -->
+    <div class="card shadow-lg border-0">
+      <div class="card-body">
+
+        <!-- Header -->
+        <div class="d-flex align-items-center mb-2">
+          <div class="me-3">
+            <!-- Placeholder avatar -->
+            <div
+              class="d-flex justify-content-center align-items-center rounded-circle"
+              style="width:80px;height:80px;background:#e7f0ff;color:#0d6efd;font-size:1.8rem;font-weight:600;"
+            >
+              {{ lecturer.full_name|default_if_none:"?"|slice:1|upper }}
+            </div>
+          </div>
+          <div>
+            <h3 class="mb-0 fw-bold text-primary">{{ lecturer.full_name }}</h3>
+            <small class="text-muted">Lecturer&nbsp;ID: {{ lecturer.lecturer_id }}</small>
+          </div>
+        </div>
+
+        <!-- HOD / Secretary Badges -->
+        <div class="mb-3">
+          {% if is_hod %}
+            <span class="badge text-bg-success me-1">
+              <i class="bi bi-star-fill"></i> Head&nbsp;of&nbsp;Department
+            </span>
+          {% endif %}
+          {% if is_secretary %}
+            <span class="badge text-bg-info me-1">
+              <i class="bi bi-envelope-fill"></i> Department&nbsp;Secretary
+            </span>
+          {% endif %}
+        </div>
+
+        <!-- Info Grid -->
+        <div class="row g-3 mb-4">
+
+          <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+              <h6 class="fw-bold mb-1"><i class="bi bi-award"></i> Role</h6>
+              <p class="mb-0">{{ lecturer.get_role_display }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+              <h6 class="fw-bold mb-1"><i class="bi bi-building"></i> College</h6>
+              <p class="mb-0">{{ college.name }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+              <h6 class="fw-bold mb-1"><i class="bi bi-diagram-3"></i> Department</h6>
+              <p class="mb-0">{{ department.name }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+              <h6 class="fw-bold mb-1"><i class="bi bi-geo-alt"></i> Office</h6>
+              {% if office %}
+                <p class="mb-0">
+                  {{ office.office_number }}, {{ office.location }}<br>
+                  Floor&nbsp;{{ office.floor }} &middot; <span class="text-warning">Type: {{ office.get_type_display }}</span>
+                </p>
+              {% else %}
+                <p class="text-muted mb-0"><em>No office assigned</em></p>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+              <h6 class="fw-bold mb-1"><i class="bi bi-journal-text"></i> Notes</h6>
+              {% if lecturer.notes %}
+                <p class="mb-0">{{ lecturer.notes }}</p>
+              {% else %}
+                <p class="text-muted mb-0"><em>No additional notes</em></p>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-end">
+          <a href="{% url 'find_my_lecturer_app:lecturer-search' %}" class="btn btn-outline-primary">
+            <i class="bi bi-search"></i> Find Another Faculty Member
+          </a>
+        </div>
+
+      </div><!-- /card-body -->
+    </div><!-- /card -->
+
+  </div><!-- /col -->
+</div><!-- /row -->
+{% endblock %}

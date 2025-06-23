@@ -1,0 +1,16 @@
+{% extends "find_my_lecturer_app/base.html" %}
+{% block title %}Lecturer Login{% endblock %}
+
+{% block content %}
+  <h2 class="mb-3">Sign in</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.username.label_tag }}<br>
+    <input type="text" name="username" class="form-control mb-2" autofocus>
+
+    {{ form.password.label_tag }}<br>
+    <input type="password" name="password" class="form-control mb-3">
+
+    <button type="submit" class="btn btn-primary w-100">Log in</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends "find_my_lecturer_app/base.html" %}
+{% load static %}
+
+{% block title %}Welcome | Find My Faculty{% endblock %}
+
+{% block content %}
+<!-- ======== Page-specific CSS ======== -->
+<style>
+/* Hero */
+.hero {
+  position: relative;
+  background: linear-gradient(135deg, #eef5ff, #d8ebff 60%);
+  border-radius: 24px;
+  overflow: hidden;
+  padding: 90px 40px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .08);
+}
+.hero-title { font-size: 3rem; font-weight: 700; }
+.tagline     { font-size: 1.25rem; color: #5c6f7f; }
+
+/* Floating blobs */
+.blob { position: absolute; border-radius: 50%; filter: blur(40px); opacity:.5; }
+.blob-1 { width: 240px; height: 240px; background:#0d6efd; top:-60px; right:-60px; }
+.blob-2 { width: 160px; height: 160px; background:#71c7ff; bottom:-50px; left:-50px; }
+
+/* Features */
+.feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.feature-icon { font-size: 2.2rem; color:#0d6efd; }
+
+/* Timeline */
+.timeline {
+  position: relative; padding-left: 40px; margin-top: 48px;
+}
+.timeline::before {
+  content:""; position:absolute; top:0; left:15px; width:2px; height:100%; background:#0d6efd;
+}
+.timeline-step {
+  position:relative; margin-bottom:40px;
+}
+.timeline-step:last-child { margin-bottom:0; }
+.timeline-badge {
+  position:absolute; left:-1px; top:0; width:16px; height:16px;
+  background:#0d6efd; border-radius:50%; transform:translate(-50%, 4px);
+}
+
+/* Counters */
+.counter-number { font-size:2rem; font-weight:700; color:#0d6efd; }
+
+@media (max-width: 767px){
+  .hero-title { font-size: 2.2rem; }
+}
+</style>
+
+<!-- ======== HERO SECTION ======== -->
+<div class="container py-5">
+  <div class="row align-items-center justify-content-center gy-4">
+    <div class="col-lg-6 order-lg-2 text-center">
+      <img src="{% static 'lecturer.jpg' %}"
+     alt="Find Lecturer"
+     class="img-fluid rounded-4 shadow hero-img-large"
+     style="max-width: 100%; width: 100%; max-height: 400px; object-fit: cover;">
+
+    </div>
+
+    <div class="col-lg-6 order-lg-1">
+      <div class="hero text-center text-lg-start">
+        <!-- decorative blobs -->
+        <div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+        <h1 class="hero-title text-primary mb-3">
+          <i class="bi bi-person-bounding-box me-2"></i> Find My Faculty
+        </h1>
+        <p class="tagline mb-4">
+          The fastest way for Covenant University students to locate their faculties — by name, department, or office.
+        </p>
+        <a href="{% url 'find_my_lecturer_app:lecturer-search' %}" class="btn btn-primary btn-lg px-4 shadow-sm">
+          <i class="bi bi-search me-1"></i> Start Searching
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== FEATURE STRIP ======== -->
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm feature-card text-center p-4">
+        <div class="feature-icon mb-3"><i class="bi bi-search"></i></div>
+        <h5 class="fw-bold mb-2">Smart Search</h5>
+        <p class="text-muted mb-0">Instant results as you type — no more scrolling PDF staff lists.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm feature-card text-center p-4">
+        <div class="feature-icon mb-3"><i class="bi bi-geo-alt"></i></div>
+        <h5 class="fw-bold mb-2">Precise Locations</h5>
+        <p class="text-muted mb-0">Building, floor &amp; office type all at a glance, so you never get lost.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm feature-card text-center p-4">
+        <div class="feature-icon mb-3"><i class="bi bi-lightning-charge"></i></div>
+        <h5 class="fw-bold mb-2">Built for Speed</h5>
+        <p class="text-muted mb-0">Lean Django + Bootstrap — loads fast on campus Wi-Fi &amp; mobile data.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== HOW IT WORKS ======== -->
+<div class="container pb-5">
+  <h3 class="text-center fw-bold mb-4">How It Works</h3>
+  <div class="timeline mx-auto" style="max-width:650px;">
+    <div class="timeline-step">
+      <div class="timeline-badge"></div>
+      <h6 class="fw-bold">1&nbsp;—&nbsp;Type a Name or Dept</h6>
+      <p class="text-muted mb-0">Use the smart search bar to enter any part of a faculty members name, department, or college.</p>
+    </div>
+    <div class="timeline-step">
+      <div class="timeline-badge"></div>
+      <h6 class="fw-bold">2&nbsp;—&nbsp;Browse Results</h6>
+      <p class="text-muted mb-0">Instantly see matching faculty members with their department and office snippet.</p>
+    </div>
+    <div class="timeline-step">
+      <div class="timeline-badge"></div>
+      <h6 class="fw-bold">3&nbsp;—&nbsp;View Full Details</h6>
+      <p class="text-muted mb-0">Click a faculty to get building, floor, and any departmental role (HOD, Secretary) info.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ======== OPTIONAL STAT COUNTERS ======== -->
+<div class="container pb-5">
+  <div class="row text-center gy-4">
+    <div class="col-sm-4">
+      <div class="counter-number">500+</div>
+      <p class="text-muted mb-0">Faculty Members Indexed</p>
+    </div>
+    <div class="col-sm-4">
+      <div class="counter-number">32</div>
+      <p class="text-muted mb-0">Departments Covered</p>
+    </div>
+    <div class="col-sm-4">
+      <div class="counter-number">8</div>
+      <p class="text-muted mb-0">Colleges Mapped</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

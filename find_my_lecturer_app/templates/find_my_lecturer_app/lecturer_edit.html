@@ -2,10 +2,55 @@
 {% block title %}Update My Info{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Update Your Information</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn btn-success" type="submit">Save Changes</button>
-</form>
+<style>
+  .form-wrapper {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .form-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 20px;
+  }
+
+  .form-control, .form-select {
+    border-radius: 8px;
+  }
+
+  .btn-save {
+    width: 100%;
+    padding: 12px;
+    font-weight: 600;
+  }
+</style>
+
+<div class="form-wrapper">
+  <h2 class="form-title text-center"><i class="bi bi-pencil-square me-2"></i>Update Your Information</h2>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <div class="form-text">{{ field.help_text }}</div>
+        {% endif %}
+        {% for error in field.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-success btn-save">
+      <i class="bi bi-check-circle me-1"></i> Save Changes
+    </button>
+  </form>
+</div>
 {% endblock %}

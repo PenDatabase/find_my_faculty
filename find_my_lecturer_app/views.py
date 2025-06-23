@@ -7,6 +7,7 @@ from django.utils.text import capfirst
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from .forms import LecturerUpdateForm
 
 from .models import (
     Lecturer,
@@ -145,13 +146,15 @@ class LecturerDashboardView(LoginRequiredMixin, TemplateView):
 
 
 
+
+
 class LecturerUpdateView(LoginRequiredMixin, UpdateView):
     model = Lecturer
-    fields = ['office', 'notes']  # Add other editable fields if needed
+    form_class = LecturerUpdateForm
     template_name = "find_my_lecturer_app/lecturer_edit.html"
 
     def get_queryset(self):
         return Lecturer.objects.filter(user=self.request.user)
 
     def get_success_url(self):
-        return reverse_lazy('lecturer-dashboard')
+        return reverse_lazy('find_my_lecturer_app:lecturer-dashboard')
